@@ -1,0 +1,5 @@
+package tservice
+
+trait tReadFiles {
+
+}
