@@ -1,6 +1,6 @@
 package repository
 
-import model.PartsModel
+import model.{LegislationModel, PartsModel}
 import play.modules.reactivemongo.ReactiveMongoApi
 import reactivemongo.api.Cursor
 import reactivemongo.api.bson.collection.BSONCollection
@@ -51,7 +51,7 @@ class LitigationMongoRepository @Inject()(
 
   def search(text:String):Future[Seq[PartsModel]] = {
     collection.flatMap(
-      _.find(BSONDocument("name" -> text), Option.empty[PartsModel])
+      _.find(BSONDocument("$text" -> BSONDocument("$search" -> text)), Option.empty[LegislationModel])
         .cursor[PartsModel]()
         .collect[Seq](-1, Cursor.FailOnError[Seq[PartsModel]]())
     )

@@ -6,7 +6,6 @@ import reactivemongo.api.bson.{BSONDocumentReader, BSONDocumentWriter, Macros}
 
 object JsonFormats {
 
-
   // Generates Writes and Reads for Feed and User thanks to Json Macros
   implicit val partFormat: Format[PartsModel] = Json.format[PartsModel]
 
@@ -37,8 +36,17 @@ object JsonFormats {
 
   implicit def litigationRead: Reads[LegislationModel] = Json.reads[LegislationModel]
 
+  /*implicit def TWrite: Writes[T] = Json.writes[T]
 
+  implicit val TFormat: Format[LegislationModel] = Json.format[LegislationModel]
 
-  implicit def litigationWrite: Writes[LegislationModel] = Json.writes[LegislationModel]
+  implicit def litigationReader: BSONDocumentReader[LegislationModel] = Macros.reader[LegislationModel]
+
+  implicit def litigationWriter: BSONDocumentWriter[LegislationModel] = Macros.writer[LegislationModel]
+
+  implicit def litigationRead: Reads[LegislationModel] = Json.reads[LegislationModel]
+
+  implicit def litigationWrite: Writes[LegislationModel] = Json.writes[LegislationModel]*/
+
 
 }

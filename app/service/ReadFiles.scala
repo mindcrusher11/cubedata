@@ -1,9 +1,7 @@
 package service
 
-import model.LegislationModel
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import tservice.tReadFiles
-import utils.JsonFormats._
 
 import java.io.FileInputStream
 /**
@@ -11,9 +9,11 @@ import java.io.FileInputStream
  * */
 object ReadFiles extends tReadFiles{
 
-  def readJsonFile(filePath: String): Unit ={
+  def readJsonFile (filePath: String): JsValue ={
     val stream = new FileInputStream(filePath)
-    val json = try {  Json.fromJson[Seq[LegislationModel]](Json.parse(stream)) } finally { stream.close() }
+    val json = try {  (Json.parse(stream)) } finally { stream.close() }
+    //val json = try {  Json.fromJson[Seq[T]](Json.parse(stream)) } finally { stream.close() }
+    json
   }
 
   def main(args:Array[String]): Unit = {
