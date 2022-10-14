@@ -6,8 +6,9 @@ import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.http.Status.OK
 import play.api.libs.json.Json
 import play.api.mvc.Result
+import play.api.http.Status.CREATED
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{GET, HOST, POST, contentAsJson, defaultAwaitTimeout, route, status, writeableOf_AnyContentAsEmpty}
+import play.api.test.Helpers.{GET, HOST, POST, contentAsJson, contentAsString, defaultAwaitTimeout, route, status, writeableOf_AnyContentAsEmpty}
 import utils.JsonFormats._
 
 import scala.concurrent.Future
@@ -17,12 +18,12 @@ class LitigationControllerSpec extends PlaySpec with GuiceOneAppPerTest {
   "Litigation controller " should {
     "render the list of litigations" in {
       val request = FakeRequest(GET, "/litigation/all").withHeaders(HOST -> "localhost:9000")
-      val home: Future[Result] = route(app, request).get
+      val partsData: Future[Result] = route(app, request).get
 
-      println(Json.fromJson[Seq[PartsModel]](contentAsJson(home)).get)
-      status(home) mustBe OK
-      //val posts: Seq[PartsModel] = Json.fromJson[Seq[PartsModel]](contentAsJson(home)).get
-      //posts.filter(_.id == "1").head mustBe (PartsModel("1","/v1/posts/1", "title 1", "blog post 1" ))
+      println(Json.fromJson[Seq[PartsModel]](contentAsJson(partsData)).get)
+      status(partsData) mustBe OK
+      val parts: Seq[PartsModel] = Json.fromJson[Seq[PartsModel]](contentAsJson(partsData)).get
+      parts.filter(_.id == "testId").head mustBe (PartsModel("testId", "testsection", "testpara", "testclause" ))
     }
 
     "create a student" in {
@@ -31,24 +32,14 @@ class LitigationControllerSpec extends PlaySpec with GuiceOneAppPerTest {
         withHeaders(HOST -> "localhost:9000").
         withBody(Json.toJson(parts))
       val partCreate: Future[Result] = route(app, request).get
-      println(status(partCreate))
+      //println(status(partCreate))
+      status(partCreate) mustBe CREATED
+
       /*val resultAsString = contentAsString(partCreate)
       println(partCreate.value.get.get)
-      resultAsString mustBe """{}"""
-    }
-  }*/
+      println(resultAsString)*/
     }
   }
 }
 
-/*class WithLitigationApplication(implicit mockedRepo: LitigationMongoRepository) extends WithApplication with Injecting {
 
-  implicit val ec = inject[ExecutionContext]
-
-  val messagesApi = inject[MessagesApi]
-
-  implicit val controller = inject[ControllerComponents]
-
-  val litigationController: LitigationController = new LitigationController(ec, mockedRepo, stubControllerComponents())
-
-}*/
