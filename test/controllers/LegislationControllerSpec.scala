@@ -24,6 +24,19 @@ class LegislationControllerSpec extends PlaySpec with GuiceOneAppPerTest {
 
   "Legislation Controller should " should  {
 
+    "read data from files" in {
+
+      val request = FakeRequest(GET,
+        "/legislation/importLegislation?path=resources/Legislation_822.json")
+        .withHeaders(HOST -> "localhost:9000")
+
+      val importData: Future[Result] = route(app, request).get
+
+      status(importData) mustBe OK
+
+      println(contentAsString(importData))
+    }
+
     "read data from database" in {
       val request = FakeRequest(GET, "/legislation/all").withHeaders(HOST -> "localhost:9000")
       val legislationData: Future[Result] = route(app, request).get
@@ -32,19 +45,6 @@ class LegislationControllerSpec extends PlaySpec with GuiceOneAppPerTest {
       status(legislationData) mustBe OK
       val legislationModel: Seq[LegislationModel] = Json.fromJson[Seq[LegislationModel]](contentAsJson(legislationData)).get
       legislationModel.head.Content.contains("Bureau") mustBe true
-    }
-
-    "read data from files" in {
-
-      val request = FakeRequest(GET,
-        "/legislation/importLegislation?path=/home/gaur/Downloads/Legislation/Legislation_822.json")
-        .withHeaders(HOST -> "localhost:9000")
-
-      val importData : Future[Result] = route(app, request).get
-
-      status(importData) mustBe OK
-
-      println(contentAsString(importData))
     }
 
     "search data from database " in {
