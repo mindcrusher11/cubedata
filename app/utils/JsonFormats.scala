@@ -4,6 +4,12 @@ import model.{ChaptersModel, LegislationModel, PartsModel, SubChaptersModel}
 import play.api.libs.json.{Format, Json, Reads, Writes}
 import reactivemongo.api.bson.{BSONDocumentReader, BSONDocumentWriter, Macros}
 
+/**
+ * defining implicit conversion of model to json and back
+ *
+ * @author Gaurhari
+ *
+ * */
 object JsonFormats {
 
   // Generates Writes and Reads for Feed and User thanks to Json Macros
